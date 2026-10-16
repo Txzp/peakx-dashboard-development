@@ -7,7 +7,7 @@ const date = (d: Date) => new Intl.DateTimeFormat('en-US', { dateStyle: 'medium'
 export function SiteShell({ active, children }: { active?: 'home' | 'games'; children: React.ReactNode }) {
   return (
     <div className="site">
-      <div className="ambient-grid" aria-hidden="true" />
+      <div className="aurora" aria-hidden="true"><i /><i /><i /><i /></div><div className="ambient-grid" aria-hidden="true" />
       <header className="site-nav">
         <Link href="/" className="site-brand"><img className="brand-logo" src={LOGO} alt="" />PEAKX</Link>
         <nav>
