@@ -15,12 +15,13 @@ async function toThumb(file: File) {
   return c.toDataURL('image/webp', 0.82)
 }
 
-export default function PostsPanel({ initialPosts, flash }: { initialPosts: PostItem[]; flash: (t: string) => void }) {
+export default function PostsPanel({ initialPosts, flash, scripts }: { initialPosts: PostItem[]; flash: (t: string) => void; scripts: { id: string; title: string }[] }) {
   const [posts, setPosts] = useState(initialPosts)
   const [thumb, setThumb] = useState('')
   const [title, setTitle] = useState('')
   const [tag, setTag] = useState('')
   const [content, setContent] = useState('')
+  const [scriptId, setScriptId] = useState('')
   const [busy, setBusy] = useState(false)
 
   async function pick(f?: File) {
@@ -31,8 +32,8 @@ export default function PostsPanel({ initialPosts, flash }: { initialPosts: Post
     if (!thumb || !title.trim() || !tag.trim() || !content.trim()) return flash('Add a thumbnail, title, tag and content first.')
     setBusy(true)
     try {
-      const p = await createPost({ title, tag, content, thumb })
-      setPosts([p, ...posts]); setThumb(''); setTitle(''); setTag(''); setContent('')
+      const p = await createPost({ title, tag, content, thumb, scriptId: scriptId || undefined })
+      setPosts([p, ...posts]); setThumb(''); setTitle(''); setTag(''); setContent(''); setScriptId('')
       flash(`[${p.title}] is live on the site`)
     } catch { flash('Could not publish this post.') } finally { setBusy(false) }
   }
@@ -55,7 +56,8 @@ export default function PostsPanel({ initialPosts, flash }: { initialPosts: Post
           <label>Title<input value={title} onChange={e => setTitle(e.target.value)} placeholder="Steal and Escape Police" maxLength={120} /></label>
           <label>Tag<input value={tag} onChange={e => setTag(e.target.value)} list="tags" placeholder="Obby, Simulator, Tycoon…" maxLength={24} /></label>
           <datalist id="tags">{[...new Set(posts.map(p => p.tag))].map(t => <option key={t} value={t} />)}</datalist>
-          <label>Content<textarea className="code-editor" style={{ minHeight: 180, font: 'inherit', fontSize: 13 }} value={content} onChange={e => setContent(e.target.value)} placeholder="Describe the script, features, how to use it…" /></label>
+          <label>Script shown on the page<select value={scriptId} onChange={e => setScriptId(e.target.value)}><option value="">None (text only)</option>{scripts.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}</select></label>
+          <label>Description<textarea className="code-editor" style={{ minHeight: 180, font: 'inherit', fontSize: 13 }} value={content} onChange={e => setContent(e.target.value)} placeholder="Describe the script, features, how to use it…" /></label>
           <div className="form-footer"><span className="muted">{content.length.toLocaleString()} characters</span><button className="primary-button" disabled={busy} onClick={publish}><Rocket size={14} /> {busy ? 'Publishing…' : 'Publish'}</button></div>
         </div>
         <aside className="panel preview-panel">
