@@ -1,0 +1,9 @@
+'use client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createAuthClient } from 'better-auth/react'
+
+const client = createAuthClient()
+export function AuthForm() { const router = useRouter(); const [mode, setMode] = useState<'sign-in'|'sign-up'>('sign-in'); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
+  async function submit(e: React.FormEvent) { e.preventDefault(); setBusy(true); setError(''); const result = mode === 'sign-in' ? await client.signIn.email({ email, password }) : await client.signUp.email({ email, password, name: 'Peakx owner' }); setBusy(false); if (result.error) setError('Unable to authenticate. Check your credentials and try again.'); else { router.push('/20115p'); router.refresh() } }
+  return <main className="auth-shell"><div className="auth-card"><div className="brand-mark">PX</div><p className="eyebrow">PEAKX / PRIVATE CONSOLE</p><h1>{mode === 'sign-in' ? 'Welcome back.' : 'Create your access.'}</h1><p className="muted">Secure script management, built for focus.</p><form onSubmit={submit} className="auth-form"><label>Email<input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" /></label><label>Password<input type="password" value={password} onChange={e => setPassword(e.target.value)} minLength={5} required autoComplete={mode === 'sign-in' ? 'current-password' : 'new-password'} /></label>{error && <p className="form-error">{error}</p>}<button disabled={busy}>{busy ? 'Authenticating…' : mode === 'sign-in' ? 'Enter workspace' : 'Create account'}</button></form><button className="text-button" onClick={() => setMode(mode === 'sign-in' ? 'sign-up' : 'sign-in')}>{mode === 'sign-in' ? 'First time here? Create access' : 'Already have access? Sign in'}</button></div></main> }
