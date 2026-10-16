@@ -8,7 +8,7 @@ const productionOrigins = [origin(process.env.VERCEL_URL), origin(process.env.VE
 
 export const auth = betterAuth({
   database: new Pool({ connectionString: process.env.DATABASE_URL }),
-  emailAndPassword: { enabled: true },
+  emailAndPassword: { enabled: true, disableSignUp: process.env.ALLOW_SIGNUP !== '1' },
   baseURL,
   trustedOrigins: process.env.NODE_ENV === 'development' ? developmentOrigins : productionOrigins,
   ...(process.env.NODE_ENV === 'development' ? { advanced: { defaultCookieAttributes: { sameSite: 'none' as const, secure: true } } } : {}),
