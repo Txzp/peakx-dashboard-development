@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Peakx — Script Management',
-  description: 'Private, permanent Lua script management for Peakx.',
+  title: 'Peakx — Roblox Scripts',
+  description: 'Fresh, maintained Lua scripts for your favorite Roblox games.',
   generator: 'v0.app',
   icons: {
     icon: [
