@@ -224,3 +224,19 @@
 .code-pre code{white-space:pre;font:inherit}
 .code-pre code:after{content:'';display:inline-block;width:7px;height:15px;margin-left:6px;vertical-align:-2px;background:#60a5fa;box-shadow:0 0 10px #60a5fab3;animation:caret 1s step-end infinite}
 @media(prefers-reduced-motion:reduce){.aurora i,.code-block:after,.code-pre code:after{animation:none}}
+
+/* ===== v6: logo, collapsible source, display mode ===== */
+.brand-logo,.auth-logo{box-shadow:none;border-radius:0;filter:drop-shadow(0 0 12px #5b9cffaa)}
+.code-wrap{position:relative}
+.code-pre.clamped{max-height:calc(50 * 1.7em + 48px);overflow:hidden}
+.code-fade{position:absolute;left:0;right:0;bottom:0;height:55%;z-index:3;display:flex;align-items:flex-end;justify-content:center;padding-bottom:22px;background:linear-gradient(180deg,rgba(3,7,18,0),rgba(3,7,18,.82) 45%,rgba(3,7,18,.97))}
+.code-more{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:999px;border:1px solid #60a5fa66;background:#60a5fa26;color:#fff;font-size:13px;font-weight:600;cursor:pointer;backdrop-filter:blur(8px);transition:transform .25s var(--ease),background .2s,box-shadow .2s}
+.code-more small{color:#9db8e0;font-weight:500;font-size:11px;margin-left:4px}
+.code-more:hover{transform:translateY(-2px);background:#60a5fa40;box-shadow:0 0 30px #3b82f655}
+.code-less{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:0;border-top:1px solid #ffffff1a;background:#ffffff06;color:#8b95a8;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.code-less:hover{color:#fff;background:#ffffff0d}
+.seg-wrap{display:flex;flex-direction:column;gap:8px}
+.seg{display:inline-flex;padding:4px;border:1px solid #243047;border-radius:999px;background:#080c14;width:fit-content}
+.seg button{padding:8px 16px;border:0;border-radius:999px;background:transparent;color:#8b95a8;font-size:12px;cursor:pointer;transition:all .25s var(--ease)}
+.seg button.on{background:#5b9cff33;color:#fff;box-shadow:inset 0 0 0 1px #5b9cff66}
+.seg-warn{color:#fca5a5;font-size:12px;line-height:1.5}
