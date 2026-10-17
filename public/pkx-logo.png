@@ -1,0 +1,79 @@
+# CRITICAL: FIX BOTH SCRIPT PRIVACY AND LOADSTRING DELIVERY
+
+Do not redesign the dashboard or add features right now. Fix these two functional bugs in the existing project. Do not assume the issue is fixed without testing the actual deployed endpoints.
+
+## BUG 1 — SCRIPT PAGE PRIVACY IS COMPLETELY SEPARATE FROM LOADSTRING VISIBILITY
+
+You are confusing two different things. They MUST be implemented as separate behaviors.
+
+Example script URL:
+
+`https://www.peakx.site/test-217a9ccd`
+
+### A. Direct browser access to the script URL
+
+**Every script URL must default to a completely private source-code page, regardless of whether its loadstring is Public or Private.**
+
+When anyone visits the URL directly in a browser, display only this exact text:
+
+`Source Private`
+
+Do not display the Lua source code, even one line. Do not display `print()`, comments, titles, previews, errors containing source code, or any other script content.
+
+The browser must receive only the minimal response needed to display `Source Private`. Do not send the Lua source code in the HTML, page source, JavaScript, API responses, metadata, embedded data, or other browser-accessible responses.
+
+Do not rely on CSS, hidden elements, client-side conditions, or redirects. The server must never send the source code to an ordinary browser request for the script page.
+
+**This browser-page privacy rule applies whether the loadstring visibility is Public or Private.**
+
+### B. Loadstring execution permission
+
+Separately, each script has a `Public` or `Private` loadstring visibility setting.
+
+- **Private loadstring:** Requests must not receive the Lua source code. The loadstring must fail to retrieve the script while it is private.
+- **Public loadstring:** The designated raw-code endpoint must return the exact saved Lua source code in plain text so the loadstring can retrieve it.
+
+Making a loadstring Public must NEVER make the source code visible when someone opens the normal script URL in a browser.
+
+Making a loadstring Private must block raw-code delivery immediately, without changing the script URL.
+
+These are separate access paths and separate behaviors. Do not use one visibility check to control both in a way that exposes the source code.
+
+## BUG 2 — PUBLIC LOADSTRINGS ARE NOT WORKING
+
+Public loadstrings currently fail in Solara and Xeno.
+
+Inspect the actual generated loadstring, deployed endpoint, HTTP response, headers, redirects, and error handling. Determine the real cause rather than guessing.
+
+For a Public script, the raw-code endpoint must:
+
+- Return the exact saved Lua source code, without HTML, Markdown, JSON wrappers, login pages, or a `Source Private` message.
+- Use an appropriate plain-text content type.
+- Avoid redirects to the dashboard or authentication page.
+- Return a successful HTTP status when the script is public.
+- Return an appropriate non-success status when the script is private or unavailable.
+- Preserve the same URL when the source code is edited.
+- Deliver the latest saved source code after edits.
+- Work correctly with the existing generated loadstring:
+
+`loadstring(game:HttpGet("https://www.peakx.site/test-217a9ccd"))()`
+
+Do not claim Solara or Xeno compatibility based solely on a successful browser page load. Verify the endpoint response and test the loadstring in an authorized environment if available. If you cannot test an executor directly, state that limitation honestly.
+
+## REQUIRED SECURITY AND TESTS
+
+Test these cases independently:
+
+1. Open the normal URL in a browser while the loadstring is Public: show only `Source Private`, with no source code in the response.
+2. Open the normal URL in a browser while the loadstring is Private: show only `Source Private`, with no source code in the response.
+3. Request the raw-code endpoint while the loadstring is Public: return the exact Lua source code as plain text.
+4. Request the raw-code endpoint while the loadstring is Private: do not return any Lua source code.
+5. Change Public to Private: raw-code delivery stops immediately.
+6. Change Private to Public: raw-code delivery works again using the same URL.
+7. Edit the script: the URL stays unchanged and the public endpoint returns the updated code.
+8. Inspect browser-accessible responses and error pages to ensure private source code never leaks.
+9. Confirm the generated loadstring points to the correct raw-code endpoint, not the private browser page.
+
+Preserve existing script IDs, URLs, database records, authentication, and dashboard functionality. Do not delete scripts or change their URLs to work around the bugs.
+
+Fix the root cause, run the tests, and report the actual results. Do not mark either bug as resolved until the relevant tests pass.
