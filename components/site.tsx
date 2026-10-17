@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-const LOGO = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PeakxPreLogo-9tbPG0DXiWTq0oIokiGGzXxCrpzTKf.png'
+const LOGO = '/peakx-logo.png'
 export type PublicPost = { id: string; title: string; tag: string; content: string; createdAt: Date }
 const date = (d: Date) => new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(d))
 
