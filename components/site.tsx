@@ -1,13 +1,13 @@
 import Link from 'next/link'
 
-const LOGO = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PeakxPreLogo-9tbPG0DXiWTq0oIokiGGzXxCrpzTKf.png'
+const LOGO = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Abstract%20White%20Ribbon%20P%20Logo-9r74tfeJwSca5J0OMBoOKPRhOvq2WX.png'
 export type PublicPost = { id: string; title: string; tag: string; content: string; createdAt: Date }
 const date = (d: Date) => new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(d))
 
 export function SiteShell({ active, children }: { active?: 'home' | 'games'; children: React.ReactNode }) {
   return (
     <div className="site">
-      <div className="ambient-grid" aria-hidden="true" />
+      <div className="aurora" aria-hidden="true"><i /><i /><i /><i /></div><div className="ambient-grid" aria-hidden="true" />
       <header className="site-nav">
         <Link href="/" className="site-brand"><img className="brand-logo" src={LOGO} alt="" />PEAKX</Link>
         <nav>
