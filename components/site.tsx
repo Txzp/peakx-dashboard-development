@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-const LOGO = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PKXlogo-removebg-Jugkol20SD6kLubnS7gILTyCgv7Ygo.png'
+const LOGO = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Abstract%20White%20Ribbon%20P%20Logo-9r74tfeJwSca5J0OMBoOKPRhOvq2WX.png'
 export type PublicPost = { id: string; title: string; tag: string; content: string; createdAt: Date }
 const date = (d: Date) => new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(d))
 

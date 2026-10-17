@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PKXlogo-removebg-Jugkol20SD6kLubnS7gILTyCgv7Ygo.png',
+        url: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Abstract%20White%20Ribbon%20P%20Logo-9r74tfeJwSca5J0OMBoOKPRhOvq2WX.png',
         type: 'image/png',
       },
     ],
