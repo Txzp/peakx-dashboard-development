@@ -32,4 +32,4 @@ export type User = typeof user.$inferSelect
 
 // Public website posts (Public Scripts tab). Run in Neon:
 // CREATE TABLE IF NOT EXISTS posts (id text PRIMARY KEY, title text NOT NULL, tag text NOT NULL, content text NOT NULL, thumb text NOT NULL, created_at timestamp NOT NULL DEFAULT now());
-export const posts = pgTable('posts', { id: text('id').primaryKey(), title: text('title').notNull(), tag: text('tag').notNull(), content: text('content').notNull(), thumb: text('thumb').notNull(), createdAt: timestamp('created_at').notNull().defaultNow(), scriptId: text('script_id') })
+export const posts = pgTable('posts', { id: text('id').primaryKey(), title: text('title').notNull(), tag: text('tag').notNull(), content: text('content').notNull(), thumb: text('thumb').notNull(), createdAt: timestamp('created_at').notNull().defaultNow(), scriptId: text('script_id'), showMode: text('show_mode') })
