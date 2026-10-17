@@ -16,11 +16,12 @@ export function CopyButton({ text }: { text: string }) {
 const COLLAPSE_AT = 50
 
 export function CodeBlock({ code, image, collapse = true, label = 'Lua' }: { code: string; image?: string; collapse?: boolean; label?: string }) {
-  const total = code.split('\n').length
-  const long = collapse && total > COLLAPSE_AT
+  const lines = code.split('\n')
+  const long = collapse && lines.length > COLLAPSE_AT
   const [open, setOpen] = useState(false)
   const clamped = long && !open
-  const nums = Array.from({ length: total }, (_, i) => i + 1).join('\n')
+  const shown = clamped ? lines.slice(0, COLLAPSE_AT) : lines
+  const nums = Array.from({ length: shown.length }, (_, i) => i + 1).join('\n')
   return (
     <div className="code-block">
       <div className="code-head">
@@ -28,10 +29,10 @@ export function CodeBlock({ code, image, collapse = true, label = 'Lua' }: { cod
         <CopyButton text={code} />
       </div>
       <div className="code-wrap">
-        <pre className={clamped ? 'code-pre clamped' : 'code-pre'}><span className="code-nums" aria-hidden="true">{nums}</span><code dangerouslySetInnerHTML={{ __html: highlight(code) }} /></pre>
+        <pre className="code-pre"><span className="code-nums" aria-hidden="true">{nums}</span><code dangerouslySetInnerHTML={{ __html: highlight(shown.join('\n')) }} /></pre>
         {clamped && (
           <div className="code-fade">
-            <button type="button" className="code-more" onClick={() => setOpen(true)}><ChevronDown size={15} /> Show Source<small>{(total - COLLAPSE_AT).toLocaleString()} more lines</small></button>
+            <button type="button" className="code-more" onClick={() => setOpen(true)}><ChevronDown size={15} /> Show Source<small>{(lines.length - COLLAPSE_AT).toLocaleString()} more lines</small></button>
           </div>
         )}
       </div>
