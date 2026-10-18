@@ -193,15 +193,6 @@
 .site-nav,.topbar{backdrop-filter:blur(16px)}
 .ambient-grid{opacity:.5}
 /* editor */
-.lua-editor{display:flex;border:1px solid #243047;border-radius:14px;overflow:hidden;background:rgba(5,8,14,.85);height:min(56vh,520px);min-height:260px;font:13px/20px ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .2s,box-shadow .2s}
-.lua-editor:focus-within{border-color:#5b9cff;box-shadow:0 0 0 3px #5b9cff22}
-.lua-gutter{flex:none;min-width:52px;padding:14px 12px 14px 8px;text-align:right;color:#4a5670;background:rgba(10,14,22,.9);border-right:1px solid #182033;overflow:hidden;white-space:pre;user-select:none}
-.lua-area{position:relative;flex:1;min-width:0}
-.lua-area pre,.lua-area textarea{position:absolute;inset:0;margin:0;padding:14px 16px;font:inherit;line-height:inherit;tab-size:2;white-space:pre;border:0;letter-spacing:0;overflow:auto}
-.lua-area pre{overflow:hidden;pointer-events:none;color:#d6e2f5;padding-bottom:40px}
-.lua-area textarea{background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:#fff;resize:none;outline:none;padding-bottom:14px}
-.lua-area textarea::selection{background:#5b9cff40}
-.lua-area textarea::placeholder{color:#4a5670;-webkit-text-fill-color:#4a5670}
 .t-k{color:#60a5fa}.t-b{color:#38bdf8}.t-f{color:#2dd4bf}.t-s{color:#f87171}.t-n{color:#fbbf24}.t-c{color:#6b7a94;font-style:italic}
 .media-row{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap}
 .icon-drop{position:relative;display:grid;place-items:center;width:84px;height:84px;margin-top:8px;border:1.5px dashed #34435f;border-radius:20px;overflow:hidden;color:#7d8aa5;cursor:pointer;background:#080c14;transition:border-color .2s,background .2s}
@@ -228,6 +219,7 @@
 /* ===== v6: logo, collapsible source, display mode ===== */
 .brand-logo,.auth-logo{box-shadow:none;border-radius:0;filter:drop-shadow(0 0 12px #5b9cffaa)}
 .code-wrap{position:relative}
+.code-pre.clamped{max-height:calc(50 * 1.7em + 48px);overflow:hidden}
 .code-fade{position:absolute;left:0;right:0;bottom:0;height:55%;z-index:3;display:flex;align-items:flex-end;justify-content:center;padding-bottom:22px;background:linear-gradient(180deg,rgba(3,7,18,0),rgba(3,7,18,.82) 45%,rgba(3,7,18,.97))}
 .code-more{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:999px;border:1px solid #60a5fa66;background:#60a5fa26;color:#fff;font-size:13px;font-weight:600;cursor:pointer;backdrop-filter:blur(8px);transition:transform .25s var(--ease),background .2s,box-shadow .2s}
 .code-more small{color:#9db8e0;font-weight:500;font-size:11px;margin-left:4px}
@@ -240,7 +232,7 @@
 .seg button.on{background:#5b9cff33;color:#fff;box-shadow:inset 0 0 0 1px #5b9cff66}
 .seg-warn{color:#fca5a5;font-size:12px;line-height:1.5}
 
-/* ===== v7: Lua editor with a single scroll container ===== */
+/* ===== v7: Lua editor with a single scroll container (no scroll syncing needed) ===== */
 .lua-editor{position:relative;height:min(56vh,520px);min-height:260px;overflow:auto;border:1px solid #243047;border-radius:14px;background:rgba(5,8,14,.85);font:13px/20px ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .2s,box-shadow .2s}
 .lua-editor:focus-within{border-color:#5b9cff;box-shadow:0 0 0 3px #5b9cff22}
 .lua-inner{display:flex;min-height:100%;min-width:100%;width:max-content}
@@ -250,7 +242,23 @@
 .lua-area textarea{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:14px 16px 40px;font:inherit;line-height:inherit;tab-size:2;white-space:pre;overflow:hidden;border:0;outline:none;resize:none;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:#fff}
 .lua-area textarea::selection{background:#5b9cff40}
 .lua-area textarea::placeholder{color:#4a5670;-webkit-text-fill-color:#4a5670}
-
 /* fallback when a browser/extension hides the color layer */
 .lua-editor.plain pre{display:none}
 .lua-editor.plain .lua-area textarea{position:relative;display:block;height:calc(var(--n,1) * 20px + 54px);color:#d6e2f5;-webkit-text-fill-color:#d6e2f5}
+
+/* ===== v8: source-protection status badge ===== */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 1s linear infinite}
+.obf-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;border:1px solid #2f3340;background:#ffffff08;color:#9aa0ab;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.obf-badge:disabled{cursor:default}
+.obf-badge.running{color:#93c5fd;border-color:#3b82f655;background:#3b82f61a}
+.obf-badge.ready{color:#86efac;border-color:#22c55e4d;background:#22c55e14;cursor:default}
+.obf-badge.error{color:#fca5a5;border-color:#ef444466;background:#ef44441a}
+.obf-badge:not(:disabled):hover{filter:brightness(1.15)}
+
+/* ===== v9: My Files (vault) ===== */
+.vault-actions{display:flex;gap:8px;flex-wrap:wrap}
+.vault-back{display:inline-flex;align-items:center;gap:7px;margin:4px 22px 0;padding:7px 14px;width:fit-content;border-radius:999px;border:1px solid #2a2b31;background:#ffffff06;color:#9aa0ab;font-size:12px;cursor:pointer;transition:all .2s}
+.vault-back:hover{color:#fff;border-color:#3b3d44;background:#ffffff0c}
+.vault-view{margin:0;padding:20px 22px;max-height:60vh;overflow:auto;background:rgba(5,8,14,.7);border-top:1px solid #ffffff14;font:13px/1.7 ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace;color:#d6e2f5;white-space:pre}
+.script-row{cursor:pointer}
