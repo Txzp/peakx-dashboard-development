@@ -9,10 +9,6 @@ import { scripts } from '@/lib/db/schema'
 import { isOwner } from '@/lib/owner'
 import { downloadJob, getRecommendedNode, queueJob, waitForJob } from '@/lib/luraph'
 
-// A status check can take up to ~60s (Luraph long-polls until the job finishes),
-// so this action needs real execution time on Vercel. 60 is the Hobby-plan ceiling —
-// raise it if you're on Pro and obfuscate very large scripts.
-export const maxDuration = 60
 
 async function owner() {
   const session = await auth.api.getSession({ headers: await headers() })
