@@ -7,6 +7,9 @@ import { listVault } from '@/app/actions/vault'
 import { isOwner } from '@/lib/owner'
 import Dashboard from '@/components/dashboard'
 
+// Needed so the obfuscation server action (up to ~60s) has time to finish.
+export const maxDuration = 60
+
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!isOwner(session?.user)) redirect('/23454-dashboard-peakx/login')
