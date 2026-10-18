@@ -9,7 +9,6 @@ import PostsPanel, { type PostItem } from '@/components/posts-panel'
 import VaultPanel, { type VaultFileMeta, type VaultFolder } from '@/components/vault-panel'
 import { ChevronsUpDown, Copy, FolderOpen, Globe, ImagePlus, Library, Loader2, LogOut, Pencil, Plus, ShieldAlert, ShieldCheck, Trash2, Upload } from 'lucide-react'
 import { createScript, deleteScript, getScript, updateScript } from '@/app/actions/scripts'
-import { obfuscateScript, retryObfuscationCheck } from '@/app/actions/obfuscate'
 
 type Item = { id: string; title: string; slug: string; visibility: string; version: string; createdAt: Date; updatedAt: Date; loadstring: string; hasImage?: boolean; obfStatus?: string | null; obfError?: string | null }
 const authClient = createAuthClient()
