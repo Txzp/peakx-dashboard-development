@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CodeBlock } from '@/components/code-block'
 import { ChevronLeftIcon } from '@/components/icons/chevron-left'
-import { CopyLoadstring } from '@/components/copy-loadstring'
 import { SiteShell, date } from '@/components/site'
 import { getPublicPost } from '@/lib/posts'
 
@@ -20,7 +19,6 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
         <div className="article-meta"><span className="site-tag static">{post.tag}</span><small>{date(post.createdAt)}</small></div>
         <h1>{post.title}</h1>
         <div className="article-body">{post.content}</div>
-        {post.loadstring && <CopyLoadstring value={post.loadstring} />}
         {(post.showMode === 'loadstring' ? post.loadstring : post.source) && (
           <CodeBlock
             code={(post.showMode === 'loadstring' ? post.loadstring : post.source)!}
