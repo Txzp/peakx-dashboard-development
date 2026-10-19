@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, Copy, File, Folder, FolderPlus, Pencil, Save, Trash2, Upload, X } from 'lucide-react'
 import { createVaultFile, createVaultFolder, deleteVaultFile, deleteVaultFolder, getVaultFile, updateVaultFile } from '@/app/actions/vault'
 import { highlight } from '@/lib/lua'
+import LuaEditor from '@/components/lua-editor'
 
 export type VaultFolder = { id: string; title: string; description: string | null; createdAt: Date }
 export type VaultFileMeta = { id: string; folderId: string | null; title: string; description: string | null; ext: string; createdAt: Date }
@@ -138,7 +139,7 @@ function EditFile({ fileId, onCancel, onSaved }: { fileId: string; onCancel: () 
       <div className="panel-heading"><div><p className="eyebrow">EDIT FILE</p><h2>{loaded.title}</h2></div><button type="button" className="more-button" onClick={onCancel}><X size={16} /></button></div>
       <label>Title<input value={loaded.title} onChange={e => setLoaded({ ...loaded, title: e.target.value })} maxLength={120} /></label>
       <label>Description<textarea value={loaded.description} onChange={e => setLoaded({ ...loaded, description: e.target.value })} placeholder="Optional" style={{ minHeight: 70 }} /></label>
-      <label>Content<textarea className="code-editor" value={loaded.content} onChange={e => setLoaded({ ...loaded, content: e.target.value })} spellCheck={false} style={{ minHeight: 260, font: 'inherit', fontSize: 13 }} /></label>
+      <label>Content<LuaEditor value={loaded.content} onChange={content => setLoaded({ ...loaded, content })} /></label>
       <div className="form-footer">
         <span className="muted">{loaded.content.split('\n').length.toLocaleString()} lines</span>
         <button className="primary-button" disabled={busy} onClick={async () => { setBusy(true); try { await updateVaultFile({ id: fileId, title: loaded.title, description: loaded.description, content: loaded.content }); onSaved({ id: fileId, title: loaded.title.trim(), description: loaded.description.trim() || null }) } finally { setBusy(false) } }}><Save size={13} /> {busy ? 'Saving…' : 'Save changes'}</button>
