@@ -1,52 +1,64 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { highlight } from '@/lib/lua'
+import { useMemo } from 'react'
+import CodeMirror from '@uiw/react-codemirror'
+import { HighlightStyle, StreamLanguage, syntaxHighlighting } from '@codemirror/language'
+import { lua } from '@codemirror/legacy-modes/mode/lua'
+import { EditorView } from '@codemirror/view'
+import { tags as t } from '@lezer/highlight'
 
-// One scroll container holds the line numbers, the color layer and the textarea,
-// so they can never get out of sync. If a browser/extension hides the color layer,
-// it falls back to showing the textarea text itself (plain mode) so code is never invisible.
+const luaLang = StreamLanguage.define(lua)
+
+// Matches the dark theme already used across the dashboard/public site.
+// @uiw/react-codemirror falls back to its own light theme unless `theme`
+// is passed explicitly — pass this as the `theme` prop, not as an extension.
+const peakxTheme = EditorView.theme({
+  '&': { backgroundColor: 'transparent', color: '#d6e2f5', height: '100%', fontSize: '13px' },
+  '.cm-content': { caretColor: '#fff', fontFamily: "ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace", padding: '14px 16px' },
+  '.cm-scroller': { fontFamily: "ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace", overflow: 'auto' },
+  '.cm-gutters': { backgroundColor: '#0a0e16', color: '#4a5670', border: 'none', borderRight: '1px solid #182033' },
+  '.cm-lineNumbers .cm-gutterElement': { padding: '0 8px 0 0' },
+  '.cm-activeLineGutter': { backgroundColor: 'transparent', color: '#8aa0c2' },
+  '.cm-activeLine': { backgroundColor: '#ffffff08' },
+  '&.cm-focused': { outline: 'none' },
+  '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': { backgroundColor: '#5b9cff40 !important' },
+  '.cm-cursor': { borderLeftColor: '#fff' },
+  '.cm-scroller::-webkit-scrollbar': { width: '10px', height: '10px' },
+  '.cm-scroller::-webkit-scrollbar-track': { background: 'transparent' },
+  '.cm-scroller::-webkit-scrollbar-thumb': { background: '#2a3347', borderRadius: '999px' },
+  '.cm-placeholder': { color: '#4a5670' },
+}, { dark: true })
+
+// Real CodeMirror highlight API — not made-up ".tok-*" class names.
+const luaHighlight = syntaxHighlighting(HighlightStyle.define([
+  { tag: t.keyword, color: '#60a5fa' },
+  { tag: [t.standard(t.variableName), t.special(t.variableName)], color: '#38bdf8' },
+  { tag: t.function(t.variableName), color: '#2dd4bf' },
+  { tag: t.string, color: '#f87171' },
+  { tag: [t.number, t.bool, t.null], color: '#fbbf24' },
+  { tag: t.comment, color: '#6b7a94', fontStyle: 'italic' },
+  { tag: t.operator, color: '#d6e2f5' },
+  { tag: t.variableName, color: '#d6e2f5' },
+]))
+
 export default function LuaEditor({ value, onChange, onDropFile, placeholder }: { value: string; onChange: (v: string) => void; onDropFile?: (f: File) => void; placeholder?: string }) {
-  const preRef = useRef<HTMLPreElement>(null)
-  const [plain, setPlain] = useState(false)
-  const html = useMemo(() => highlight(value) + '\n', [value])
-  const lines = useMemo(() => value.split('\n').length, [value])
-  const nums = useMemo(() => Array.from({ length: lines }, (_, i) => i + 1).join('\n'), [lines])
-
-  useEffect(() => {
-    const check = () => {
-      const el = preRef.current
-      if (!el) return
-      const cs = getComputedStyle(el)
-      setPlain(cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0' || el.getBoundingClientRect().height === 0)
-    }
-    check()
-    const t1 = setTimeout(check, 500), t2 = setTimeout(check, 2000)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
-  }, [])
-
+  const extensions = useMemo(() => [luaLang, luaHighlight], [])
   return (
-    <div className={plain ? 'lua-editor plain' : 'lua-editor'} style={{ '--n': lines } as React.CSSProperties} onDragOver={e => e.preventDefault()} onDrop={e => { const f = e.dataTransfer.files[0]; if (f && onDropFile) { e.preventDefault(); onDropFile(f) } }}>
-      <div className="lua-inner">
-        <div className="lua-gutter" aria-hidden="true">{nums}</div>
-        <div className="lua-area">
-          <pre ref={preRef} aria-hidden="true" dangerouslySetInnerHTML={{ __html: html }} />
-          <textarea
-            value={value}
-            spellCheck={false}
-            wrap="off"
-            placeholder={placeholder}
-            onChange={e => onChange(e.target.value)}
-            onKeyDown={e => {
-              if (e.key !== 'Tab') return
-              e.preventDefault()
-              const t = e.currentTarget, a = t.selectionStart, b = t.selectionEnd
-              onChange(value.slice(0, a) + '  ' + value.slice(b))
-              requestAnimationFrame(() => { t.selectionStart = t.selectionEnd = a + 2 })
-            }}
-          />
-        </div>
-      </div>
+    <div
+      className="lua-editor"
+      onDragOver={e => e.preventDefault()}
+      onDrop={e => { const f = e.dataTransfer.files[0]; if (f && onDropFile) { e.preventDefault(); onDropFile(f) } }}
+    >
+      <CodeMirror
+        value={value}
+        height="100%"
+        theme={peakxTheme}
+        basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: true, tabSize: 2 }}
+        extensions={extensions}
+        placeholder={placeholder}
+        onChange={v => onChange(v)}
+        indentWithTab
+      />
     </div>
   )
 }

@@ -228,7 +228,8 @@
 .seg-warn{color:#fca5a5;font-size:12px;line-height:1.5}
 
 /* ===== v7: Lua editor with a single scroll container (no scroll syncing needed) ===== */
-.lua-editor{position:relative;height:min(56vh,520px);min-height:260px;overflow:auto;border:1px solid #243047;border-radius:14px;background:rgba(5,8,14,.85);font:13px/20px ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .2s,box-shadow .2s}
+.lua-editor{position:relative;height:min(56vh,520px);min-height:260px;overflow:hidden;border:1px solid #243047;border-radius:14px;background:rgba(5,8,14,.85);font:13px/20px ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .2s,box-shadow .2s}
+.lua-editor .cm-theme,.lua-editor .cm-editor{height:100%}
 .lua-editor:focus-within{border-color:#5b9cff;box-shadow:0 0 0 3px #5b9cff22}
 .lua-inner{display:flex;min-height:100%;min-width:100%;width:max-content}
 .lua-gutter{position:sticky;left:0;z-index:2;flex:none;min-width:52px;padding:14px 12px 40px 8px;text-align:right;color:#4a5670;background:#0a0e16;border-right:1px solid #182033;white-space:pre;user-select:none}
