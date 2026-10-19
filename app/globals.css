@@ -332,3 +332,7 @@
 .site-footer{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
 .site-footer a{color:#7c90b8;text-decoration:none;transition:color .2s}
 .site-footer a:hover{color:#fff}
+
+/* ===== change-password modal ===== */
+.pw-overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:#02040ccc;backdrop-filter:blur(6px);animation:rise .2s var(--ease) both}
+.pw-modal{width:min(380px,90vw);margin:0}
