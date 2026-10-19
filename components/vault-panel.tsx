@@ -3,8 +3,8 @@
 import { useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, Copy, File, Folder, FolderPlus, Pencil, Save, Trash2, Upload, X } from 'lucide-react'
 import { createVaultFile, createVaultFolder, deleteVaultFile, deleteVaultFolder, getVaultFile, updateVaultFile } from '@/app/actions/vault'
-import { highlight } from '@/lib/lua'
 import LuaEditor from '@/components/lua-editor'
+import { highlight } from '@/lib/lua'
 
 export type VaultFolder = { id: string; title: string; description: string | null; createdAt: Date }
 export type VaultFileMeta = { id: string; folderId: string | null; title: string; description: string | null; ext: string; createdAt: Date }
