@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { ArrowUpRightIcon } from '@/components/icons/arrow-up-right'
 import { ChevronRightIcon } from '@/components/icons/chevron-right'
+import { LightningBg } from '@/components/lightning-bg'
 
 const LOGO = '/peakx-logo.png'
+const DISCORD = 'https://discord.gg/NtaW8MjZfX'
 export type PublicPost = { id: string; title: string; tag: string; content: string; createdAt: Date }
 const date = (d: Date) => new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(d))
 
@@ -12,7 +14,11 @@ export function SiteShell({ active, children }: { active?: 'home' | 'games' | 'e
   )
   return (
     <div className="site">
-      <div className="site-bg" aria-hidden="true"><i className="orb orb-a" /><i className="orb orb-b" /><i className="sheen" /><i className="grain" /><i className="vignette" /></div>
+      <div className="site-bg" aria-hidden="true">
+        <i className="blob b1" /><i className="blob b2" /><i className="blob b3" /><i className="blob b4" />
+        <LightningBg />
+        <i className="vignette" />
+      </div>
       <header className="site-nav">
         <nav>
           {link('/', 'Home', 'home')}
@@ -21,20 +27,20 @@ export function SiteShell({ active, children }: { active?: 'home' | 'games' | 'e
         </nav>
       </header>
       <main className="site-main">{children}</main>
-      <footer className="site-footer">© {new Date().getFullYear()} Peakx</footer>
+      <footer className="site-footer">
+        <span>© {new Date().getFullYear()} Peakx</span>
+        <a href={DISCORD} target="_blank" rel="noreferrer">Discord</a>
+      </footer>
     </div>
   )
 }
 
+// Thumbnail + name only — the rest only shows once you open the game.
 export function PostCard({ post, i = 0 }: { post: PublicPost; i?: number }) {
   return (
     <Link href={`/games/${post.id}`} className="site-card" style={{ '--i': i } as React.CSSProperties}>
-      <div className="site-thumb"><img src={`/thumb/${post.id}`} alt="" loading="lazy" /><span className="site-tag">{post.tag}</span></div>
-      <div className="site-card-body">
-        <div className="site-card-text"><h3>{post.title}</h3><p>{post.content.slice(0, 100)}{post.content.length > 100 ? '…' : ''}</p></div>
-        <span className="site-card-arrow"><ArrowUpRightIcon size={15} /></span>
-      </div>
-      <small className="site-card-date">{date(post.createdAt)}</small>
+      <div className="site-thumb"><img src={`/thumb/${post.id}`} alt="" loading="lazy" /></div>
+      <div className="site-card-body"><h3>{post.title}</h3><span className="site-card-arrow"><ArrowUpRightIcon size={15} /></span></div>
     </Link>
   )
 }
